@@ -4,10 +4,10 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-#define LEFT 97
-#define RIGHT 100
-#define UP 119
-#define DOWN 115
+#define LEFT 119
+#define RIGHT 115
+#define UP 97
+#define DOWN 100
 #define ESC 27
 
 using namespace std;
@@ -47,7 +47,10 @@ void Turn(char Key)
 		clear();
         printw("Exit?\n");
         Key=getch();
-        if(Key==ESC)exit(0);
+		if(Key==ESC) {
+				endwin();
+				exit(0);
+		}
     }
     if(Direction+Now==3)Direction=Now;
     return;
@@ -71,6 +74,9 @@ void Move()
             }
 			clear();
             printw("Game Over!\n");
+			timeout(-1);
+			getch();
+			endwin();
             exit(0);
         }
         Update();
@@ -111,6 +117,8 @@ void Print()
 int main()
 {
 	initscr();
+	curs_set(0);
+	timeout(200);
     for(int i=0;i<=21;i+=21)
         for(int j=0;j<=21;j++)
             Map[i][j]=NextX[i][j]=1;
@@ -120,20 +128,12 @@ int main()
     Map[10][10]=1;
     Update();
     Print();
-    //Turn(getch());
-	//Move();
     while(1)
     {
 		char Key;
-        //if(kbhit())Turn();
        	if(Key = getch())Turn(Key);
         Move();
         Print();
-        //if(kbhit())Turn();
-       	if(Key = getch())Turn(Key);
-        sleep(0.01);
-        //if(kbhit())Turn();
-       	if(Key = getch())Turn(Key);
     }
     return 0;
 }
