@@ -1,13 +1,13 @@
-#include<cstdio>
-#include<cstdlib>
-#include<ctime>
-#include<windows.h>
-#include<conio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <ncurses.h>
+#include <unistd.h>
 
-#define LEFT 72
-#define RIGHT 80
-#define UP 75
-#define DOWN 77
+#define LEFT 97
+#define RIGHT 100
+#define UP 119
+#define DOWN 115
 #define ESC 27
 
 using namespace std;
@@ -34,9 +34,9 @@ void Update()
     return;
 }
 
-void Turn()
+void Turn(char Key)
 {
-    int Key=getch();
+    //int Key=getch();
     int Now=Direction;
     if(Key==LEFT)Direction=2;
     if(Key==RIGHT)Direction=1;
@@ -44,8 +44,8 @@ void Turn()
     if(Key==DOWN)Direction=0;
     if(Key==ESC)
     {
-        system("cls");
-        printf("Exit?\n");
+		clear();
+        printw("Exit?\n");
         Key=getch();
         if(Key==ESC)exit(0);
     }
@@ -69,9 +69,8 @@ void Move()
                 TailY=NextY[HeadX][HeadY];
                 return;
             }
-            system("cls");
-            printf("Game Over!\n");
-            system("pause");
+			clear();
+            printw("Game Over!\n");
             exit(0);
         }
         Update();
@@ -97,20 +96,21 @@ void Move()
 
 void Print()
 {
-    system("cls");
+	clear();
     for(int i=0;i<=21;i++)
     {
         for(int j=0;j<=21;j++)
-            Map[i][j]==1?printf(" *"):printf("  ");
-        printf("\n");
+            Map[i][j]==1?printw(" *"):printw("  ");
+        printw("\n");
     }
-    printf(" Length:%d\n",Length);
-    printf(" Game Mode By HUST_hxj\n");
+    printw(" Length:%d\n",Length);
+    printw(" Game Mode By HUST_hxj\n");
     return;
 }
 
 int main()
 {
+	initscr();
     for(int i=0;i<=21;i+=21)
         for(int j=0;j<=21;j++)
             Map[i][j]=NextX[i][j]=1;
@@ -120,15 +120,20 @@ int main()
     Map[10][10]=1;
     Update();
     Print();
-    Turn();
+    //Turn(getch());
+	//Move();
     while(1)
     {
-        if(kbhit())Turn();
+		char Key;
+        //if(kbhit())Turn();
+       	if(Key = getch())Turn(Key);
         Move();
         Print();
-        if(kbhit())Turn();
-        Sleep(100);
-        if(kbhit())Turn();
+        //if(kbhit())Turn();
+       	if(Key = getch())Turn(Key);
+        sleep(0.01);
+        //if(kbhit())Turn();
+       	if(Key = getch())Turn(Key);
     }
     return 0;
 }
