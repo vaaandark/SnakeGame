@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <unistd.h>
+#include <ncurses.h>
 
 using namespace std;
 
@@ -64,10 +65,11 @@ void Move()
                 TailY=NextY[HeadX][HeadY];
                 return;
             }
-            system("clear");
-            printf("Game Over!\n");
-            printf("Length:%d\n",Length);
-            system("pause");
+            clear();
+            printw("Game Over!\n");
+            printw("Length:%d\n",Length);
+			getch();
+			endwin();
             exit(0);
         }
         Update();
@@ -93,20 +95,22 @@ void Move()
 
 void Print()
 {
-    system("clear");
+    clear();
     for(int i=0;i<=41;i++)
     {
         for(int j=0;j<=41;j++)
-            Map[i][j]==1?printf(" *"):printf("  ");
-        printf("\n");
+            Map[i][j]==1?printw(" *"):printw("  ");
+        printw("\n");
     }
-    printf(" Length:%d\n",Length);
-    printf(" Auto Mode By Honeta\n");
+    printw(" Length:%d\n",Length);
+    printw(" Auto Mode By Honeta\n");
     return;
 }
 
 int main()
 {
+	initscr();
+	curs_set(0);
     for(int i=0;i<=41;i+=41)
         for(int j=0;j<=41;j++)
             Map[i][j]=NextX[i][j]=1;
@@ -122,8 +126,8 @@ int main()
         Turn();
         Move();
         Print();
-        usleep(100000);
-        system("clear");
+		refresh();
+        usleep(50000);
     }
     return 0;
 }
