@@ -46,11 +46,13 @@ void Turn(char Key)
     {
 		clear();
         printw("Exit?\n");
+		timeout(-1);
         Key=getch();
 		if(Key==ESC) {
 				endwin();
 				exit(0);
 		}
+		timeout(200);
     }
     if(Direction+Now==3)Direction=Now;
     return;
