@@ -118,9 +118,9 @@ void Print()
 
 int main()
 {
-	initscr();
-	curs_set(0);
-	timeout(200);
+    initscr();
+    curs_set(0);
+    timeout(500);
     for(int i=0;i<=21;i+=21)
         for(int j=0;j<=21;j++)
             Map[i][j]=NextX[i][j]=1;
